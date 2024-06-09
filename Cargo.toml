@@ -1,0 +1,33 @@
+[package]
+name = "shrtc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+#Base command
+[[bin]]
+name = "shrtc"
+path = "src/base/main.rs"
+
+[lib]
+name = "base"
+path = "src/base/lib.rs"
+
+[[bin]]
+name = "shrtc-add"
+path = "src/commands/add/main.rs"
+
+[[bin]]
+name = "shrtc-remove"
+path = "src/commands/remove/main.rs"
+
+[[bin]]
+name = "shrtc-get"
+path = "src/commands/get/main.rs"
+
+[[bin]]
+name = "shrtc-list"
+path = "src/commands/list/main.rs"
+
+
