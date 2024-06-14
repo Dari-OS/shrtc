@@ -1,3 +1,7 @@
+use std::io;
+use serde::{Serialize, Deserializer};
+
+#[derive(Debug, )]
 pub struct Command {
     name: String,
     command: String,
@@ -14,22 +18,33 @@ impl Command {
         }
     }
 
-    pub fn get_name(&mut self) -> &mut String {
+    pub fn name(&mut self) -> &mut String {
         return  &mut self.name;
     }
 
-    pub fn get_command(&mut self) -> &mut String {
+    pub fn command(&mut self) -> &mut String {
         return &mut self.name;
     }
 
-    pub fn is_default(&mut self) -> &mut bool {
+    pub fn default(&mut self) -> &mut bool {
         return &mut self.default_command;
     }
 
-    pub fn execute(&self, args: &[&str]) {
-        for arg in args {
-            
+    pub fn execute(&self, args: &str) -> Result<(), io::Error>{
+        let (shell, shell_arg) = match std::env::consts::OS {
+            "windows" => ("cmd","/c"),
+            unix => ("sh", "-c"),
+        };
+
+        match std::process::Command::new(shell)
+            .arg(shell_arg)
+            .arg(&self.name)
+            .arg(args)
+            .output() {
+            Ok(_) => {Ok(())}
+            Err(e) => {Err(e)}
         }
+
     }
 
 }

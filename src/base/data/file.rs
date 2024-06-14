@@ -1,6 +1,6 @@
 const DATA_NAME: &str = "shrtc.data";
 const FOLDER_NAME: &str = ".shrtc";
-const DATA_PATH: String = format!("{}/{}", FOLDER_NAME, DATA_NAME);
+const DATA_PATH: String = format!("{}/{}", &FOLDER_NAME, &DATA_NAME);
 
 use std::{fs, io};
 use std::fs::File;
@@ -10,9 +10,9 @@ use std::path::Path;
 
 /// This initializes the file structure for **shrtc**
 fn initialize() {
-    if !Path::new(FOLDER_NAME).exists() {
-        if let Err(e)= fs::create_dir(FOLDER_NAME) {
-            panic!("Could not create directory ({}) for shrtc:\n{}",FOLDER_NAME, e);
+    if !Path::new(&FOLDER_NAME).exists() {
+        if let Err(e)= fs::create_dir(&FOLDER_NAME) {
+            panic!("Could not create directory ({}) for shrtc:\n{}",&FOLDER_NAME, e);
         }
     }
 
