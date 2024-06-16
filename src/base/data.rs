@@ -33,8 +33,8 @@ pub fn add(command: &Shortcut) -> bool{
 pub fn remove(name: &str) -> bool {
     let mut file_content = all();
     let mut removed = false;
-    'removal: for  (index, command) in file_content.iter_mut().enumerate() {
-        if command.name() == name {
+    'removal: for  (index, shortcut) in file_content.iter_mut().enumerate() {
+        if shortcut.name() == name {
             file_content.remove(index);
             removed = true;
             break 'removal; //for educational purposes
@@ -61,11 +61,21 @@ pub fn all() -> Vec<Shortcut> {
     })
 }
 
-pub fn set(commands: Vec<Shortcut>) {
-    let json = serde_json::to_string_pretty(&commands).unwrap(); //Should never fail
+pub fn set(shortcuts: Vec<Shortcut>) {
+    let json = serde_json::to_string_pretty(&shortcuts).unwrap(); //Should never fail
     file::write_data(&json).unwrap_or_else(|e| {
         println!("Could not write to file {}", file::DATA_NAME);
         println!("{}", e);
         exit(1)
     });
+}
+
+pub fn get(name: &str) -> Option<Shortcut> {
+    let file_content = all();
+    for shortcut in file_content {
+        if shortcut.name() == name {
+            return Some(shortcut)
+        }
+    }
+    None
 }

@@ -6,8 +6,7 @@ edition = "2021"
 [dependencies]
 serde = { version = "1.0.203", features = ["derive"] }
 serde_json = "1.0"
-colored = "2"
-term_size = "1.0.0-beta1"
+crossterm = "0.27.0"
 
 
 #Base command
@@ -43,3 +42,6 @@ path = "src/commands/help/main.rs"
 name = "shrtc-about"
 path = "src/commands/about/main.rs"
 
+[[bin]]
+name = "shrtc-github"
+path = "src/commands/github/main.rs"

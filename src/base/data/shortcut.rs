@@ -39,7 +39,7 @@ impl Shortcut {
 
         std::process::Command::new(shell)
             .arg(shell_arg)
-            .arg(&self.name)
+            .arg(&self.command)
             .arg(args)
             .output()
     }

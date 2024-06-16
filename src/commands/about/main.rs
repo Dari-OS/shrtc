@@ -1,7 +1,7 @@
 use std::env;
-use colored::*;
-use std::cmp;
-use term_size::{dimensions};
+use crossterm::{terminal};
+use crossterm::style::{ResetColor, Stylize};
+
 
 fn main() {
     print_about();
@@ -12,22 +12,24 @@ fn print_about() {
     let name = "shrtc";
     let description = "shrtc is a versatile command-line tool that allows the creation of text-based shortcuts.";
 
+    // Get terminal dimensions
+    let (term_width, _) = terminal::size().unwrap_or((80, 0));
 
-    let term_width = match dimensions() {
-        Some((w, _)) => w,
-        _ => 80, // Default width if terminal size cannot be decided
-    };
+    // Prepare borders and text
+    let top_border = format!("{}", "═".repeat((term_width - 2) as usize));
+    let bottom_border = format!("{}", "═".repeat((term_width - 2) as usize));
 
+    let name_version_line = format!("{}", centered(&format!("{} {}", name.bold(), version), term_width as usize + name.len() +1));
 
-    let top_border = format!("╔{}╗", "═".repeat(term_width-2)).bold().blue();
-    let bottom_border = format!("╚{}╝", "═".repeat(term_width -2)).bold().blue();
-    let name_version_line = format!("║ {} ║", centered(&format!("{} v{}", name.bold(), version), term_width+name.len()-1)).bold().blue();
-    let desc_centered = &description.italic().black().on_blue().to_string();
+    let desc_centered = centered(&description.italic().black().on_blue().to_string(), term_width as usize + (name.len()  + version.len() +3) * 2);
 
-    println!("\n{}", top_border);
-    println!("{}", name_version_line);
-    println!("{}", bottom_border);
-    println!("\n{}", desc_centered);
+    let line  = "║".bold().blue();
+    println!("{}", format!("╔{}╗", top_border).bold().blue());
+    println!("{}", format!("{}{}{}",&line, name_version_line.bold().blue(), &line));
+    println!("{}", format!("╚{}╝", bottom_border).bold().blue());
+    println!();
+    println!("{}", format!("{}\n", desc_centered));
+    println!("{}", ResetColor);
 }
 
 fn centered(text: &str, width: usize) -> String {

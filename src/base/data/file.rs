@@ -47,6 +47,7 @@ fn default_to_json() -> String{
     let default_commands: Vec<Shortcut> = vec![
         Shortcut::new("about", "shrtc-about", true),
         Shortcut::new("help", "shrtc-add", true),
+        Shortcut::new("github", "shrtc-github", true),
         Shortcut::new("add", "shrtc-add", true),
         Shortcut::new("rm", "shrtc-rm", true),
         Shortcut::new("ls", "shrtc-ls", true),
