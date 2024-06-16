@@ -14,8 +14,8 @@ use shortcut::Shortcut;
 pub fn add(command: &Shortcut) -> bool{
     let mut file_content = all();
 
-    for temp_Command in &file_content { //Checks if the name is already being used
-        if temp_Command.name() == command.name() {
+    for temp_command in &file_content { //Checks if the name is already being used
+        if temp_command.name() == command.name() {
         return false;
         }
     };
