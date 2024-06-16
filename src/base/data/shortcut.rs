@@ -3,32 +3,32 @@ use std::process::Output;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Command {
+pub struct Shortcut {
     name: String,
     command: String,
     default_command: bool,
 }
 
 
-impl Command {
-    pub fn new(name: &str, command: &str, is_default: bool) -> Command {
-        Command {
+impl Shortcut {
+    pub fn new(name: &str, command: &str, is_default: bool) -> Shortcut {
+        Shortcut {
             name: String::from(name),
             command: String::from(command),
             default_command: is_default
         }
     }
 
-    pub fn name(&mut self) -> &mut String {
-        return &mut self.name;
+    pub fn name(&self) -> &String {
+        return &self.name;
     }
 
     pub fn command(&mut self) -> &mut String {
         return &mut self.name;
     }
 
-    pub fn default(&mut self) -> &mut bool {
-        return &mut self.default_command;
+    pub fn default(&self) -> &bool {
+        return &self.default_command;
     }
 
     pub fn execute(&self, args: &str) -> io::Result<Output> {

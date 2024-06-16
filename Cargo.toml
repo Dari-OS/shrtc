@@ -20,15 +20,15 @@ name = "shrtc-add"
 path = "src/commands/add/main.rs"
 
 [[bin]]
-name = "shrtc-remove"
-path = "src/commands/remove/main.rs"
+name = "shrtc-rm"
+path = "src/commands/rm/main.rs"
 
 [[bin]]
 name = "shrtc-get"
 path = "src/commands/get/main.rs"
 
 [[bin]]
-name = "shrtc-list"
-path = "src/commands/list/main.rs"
+name = "shrtc-ls"
+path = "src/commands/ls/main.rs"
 
 

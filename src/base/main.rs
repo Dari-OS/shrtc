@@ -1,7 +1,12 @@
 extern crate base;
 
-use base::test;
+use std::env;
+
 
 fn main() {
-test();
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+
+        return;
+    }
 }
