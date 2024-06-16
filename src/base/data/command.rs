@@ -1,7 +1,8 @@
 use std::io;
-use serde::{Serialize, Deserializer};
+use std::process::Output;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, )]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Command {
     name: String,
     command: String,
@@ -19,7 +20,7 @@ impl Command {
     }
 
     pub fn name(&mut self) -> &mut String {
-        return  &mut self.name;
+        return &mut self.name;
     }
 
     pub fn command(&mut self) -> &mut String {
@@ -30,21 +31,24 @@ impl Command {
         return &mut self.default_command;
     }
 
-    pub fn execute(&self, args: &str) -> Result<(), io::Error>{
+    pub fn execute(&self, args: &str) -> io::Result<Output> {
         let (shell, shell_arg) = match std::env::consts::OS {
-            "windows" => ("cmd","/c"),
-            unix => ("sh", "-c"),
+            "windows" => ("cmd", "/c"),
+            _unix => ("sh", "-c"),
         };
 
-        match std::process::Command::new(shell)
+        std::process::Command::new(shell)
             .arg(shell_arg)
             .arg(&self.name)
             .arg(args)
-            .output() {
-            Ok(_) => {Ok(())}
-            Err(e) => {Err(e)}
-        }
-
+            .output()
+    }
+    pub fn to_json(&self) -> serde_json::Result<String> {
+        serde_json::to_string_pretty(&self)
     }
 
+    pub fn from_json(jsonified_string: &String) -> serde_json::Result<Self> {
+        serde_json::from_str(jsonified_string)
+    }
 }
+

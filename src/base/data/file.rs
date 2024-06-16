@@ -1,6 +1,7 @@
-const DATA_NAME: &str = "shrtc.data";
+pub const DATA_NAME: &str = "shrtc.data";
 const FOLDER_NAME: &str = ".shrtc";
-const DATA_PATH: String = format!("{}/{}", &FOLDER_NAME, &DATA_NAME);
+
+const DEFAULT_COMMANDS: &str = r"[]";
 
 use std::{fs, io};
 use std::fs::File;
@@ -8,19 +9,21 @@ use std::io::Write;
 use std::path::Path;
 
 
+
 /// This initializes the file structure for **shrtc**
 fn initialize() {
+    let data_path = format!("{}/{}", &FOLDER_NAME, &DATA_NAME);
     if !Path::new(&FOLDER_NAME).exists() {
         if let Err(e)= fs::create_dir(&FOLDER_NAME) {
             panic!("Could not create directory ({}) for shrtc:\n{}",&FOLDER_NAME, e);
         }
     }
 
-    if !Path::new(&DATA_PATH).exists() {
-        match fs::File::create(&DATA_PATH) {
+    if !Path::new(&data_path).exists() {
+        match fs::File::create(&data_path) {
             Ok(mut file) => {
-                file.write_all(b"[]").unwrap_or_else(|err| {
-                    panic!("Could not write content into {}:\n{}", &DATA_PATH, err);
+                file.write_all(DEFAULT_COMMANDS.as_bytes()).unwrap_or_else(|err| {
+                    panic!("Could not write content into {}:\n{}", &data_path, err);
                 });
 
             }
@@ -34,10 +37,13 @@ fn initialize() {
 
 pub fn write_data(content: &str) -> io::Result<()> {
     initialize();
-    File::open(&DATA_PATH).unwrap()?.write_all(content.as_bytes())?;
+    let data_path = format!("{}/{}", &FOLDER_NAME, &DATA_NAME);
+    let mut file = File::create(&data_path)?;
+    file.write_all(content.as_bytes())?;
     Ok(())
 }
 
 pub fn read_data() -> Result<String, io::Error> {
-    Ok(fs::read_to_string(DATA_PATH)?)
+    initialize();
+    Ok(fs::read_to_string(format!("{}/{}", &FOLDER_NAME, &DATA_NAME))?)
 }
