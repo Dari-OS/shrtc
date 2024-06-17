@@ -11,16 +11,16 @@ use shortcut::Shortcut;
 /// Returns `true` if the *shortcut* was successfully added to the file.
 /// Returns `false` if the *shortcut* is already declared
 ///
-pub fn add(command: &Shortcut) -> bool{
+pub fn add(shortcut: &Shortcut) -> bool{
     let mut file_content = all();
 
     for temp_command in &file_content { //Checks if the name is already being used
-        if temp_command.name() == command.name() {
+        if temp_command.name() == shortcut.name() {
         return false;
         }
     };
 
-    file_content.push(command.clone());
+    file_content.push(shortcut.clone());
     set(file_content);
     true
 }
@@ -44,6 +44,33 @@ pub fn remove(name: &str) -> bool {
       set(file_content);
     }
     removed
+
+}
+
+///
+/// Removes a *shortcut* from the file <b>if the default flag</b> is *false*.
+/// - Returns `0` if the *shortcut* was successfully removed from the file.
+/// - Returns `1` if the *shortcut* does not exist
+/// - Returns `2` If the *shortcut* cannot be removed, because it is declared as: _default_
+///
+pub fn remove_safely(name: &str) -> u8 {
+    let mut file_content = all();
+    let mut removed_status_code = 1;
+    'removal: for  (index, shortcut) in file_content.iter_mut().enumerate() {
+        if shortcut.name() == name {
+            if !shortcut.default() {
+                file_content.remove(index);
+                removed_status_code = 0;
+            } else {
+                removed_status_code = 2;
+            }
+            break 'removal; //for educational purposes
+        }
+    }
+    if removed_status_code == 0 {
+        set(file_content);
+    }
+    removed_status_code
 
 }
 

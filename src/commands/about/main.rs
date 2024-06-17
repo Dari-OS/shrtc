@@ -33,9 +33,9 @@ fn print_about() {
 }
 
 fn centered(text: &str, width: usize) -> String {
-    let padding = width.saturating_sub(text.len());
+    let padding = width - text.len();
     let padding_left = padding / 2;
     let padding_right = padding - padding_left;
 
-    format!("{:padding_left$}{}{:padding_right$}", "", text, "", padding_left = padding_left, padding_right = padding_right)
+    format!("{}{}{}"," ".repeat(padding_left) ,text, " ".repeat(padding_right))
 }

@@ -35,12 +35,12 @@ impl Shortcut {
         let (shell, shell_arg) = match std::env::consts::OS {
             "windows" => ("cmd", "/c"),
             _unix => ("sh", "-c"),
-        };
 
+        };
+        let combined_command = format!("{} {}", &self.command, args);
         std::process::Command::new(shell)
             .arg(shell_arg)
-            .arg(&self.command)
-            .arg(args)
+            .arg(combined_command)
             .output()
     }
     pub fn to_json(&self) -> serde_json::Result<String> {

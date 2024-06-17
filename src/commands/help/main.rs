@@ -1,11 +1,12 @@
-use crossterm::style::Stylize;
+use crossterm::style::{Color, Stylize};
+
 
 fn main() {
     print_help();
 }
 
 fn print_help() {
-    println!("{}", "Commands:".underline_dark_yellow().yellow());
+    println!("{}", "Commands:".yellow().underline(Color::DarkYellow));
     println!("  {} - {} {}", "about".cyan().bold(), "Shows your some information about", "shrtc".bold());
     println!("  {} - {}", "help".cyan().bold(), "Shows all standard shortcuts and their usage");
     println!("  {} - {}", "github".cyan().bold(), "Shows my GitHub profile");

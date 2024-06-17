@@ -20,10 +20,18 @@ fn main() {
     }
 
     if let Some(shortcut) = base::data::get(args[1].as_str()) {
-        execute(shortcut, args.get(2).unwrap_or(&String::new()));
+        let mut rest_args = String::from("");
+        if args.len() >= 2 {
+            for current_arg in &args[2..] {
+                rest_args.push_str(current_arg);
+                rest_args.push(' ');
+            }
+        }
+
+        execute(shortcut, &rest_args);
     } else {
         println!("{} was not recognized as shortcut-name.\
-                    \nDo \"shrtc help\" to get a list of the default commands.", args[1])
+                    \nDo \"shrtc help\" to get a list of the default commands and their usage.", args[1])
     }
 }
 

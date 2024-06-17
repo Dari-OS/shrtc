@@ -1,5 +1,5 @@
 use std::env;
 
 fn main() {
-    println!("Get: {}", env::args().collect())
+    println!("Get: command")
 }

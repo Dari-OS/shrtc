@@ -5,7 +5,7 @@ use std::path::Path;
 use serde_json;
 use super::shortcut::Shortcut;
 
-pub const DATA_NAME: &str = "shrtc.data";
+pub const DATA_NAME: &str = "shrtc.json";
 const FOLDER_NAME: &str = ".shrtc";
 const SCRIPT_FOLDER_NAME: &str = "scripts"; //TODO Add support to store scripts in the config
 
@@ -46,7 +46,7 @@ fn initialize() {
 fn default_to_json() -> String{
     let default_commands: Vec<Shortcut> = vec![
         Shortcut::new("about", "shrtc-about", true),
-        Shortcut::new("help", "shrtc-add", true),
+        Shortcut::new("help", "shrtc-help", true),
         Shortcut::new("github", "shrtc-github", true),
         Shortcut::new("add", "shrtc-add", true),
         Shortcut::new("rm", "shrtc-rm", true),
