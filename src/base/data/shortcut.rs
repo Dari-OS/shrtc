@@ -24,7 +24,7 @@ impl Shortcut {
     }
 
     pub fn command(&mut self) -> &mut String {
-        return &mut self.name;
+        return &mut self.command;
     }
 
     pub fn default(&self) -> &bool {

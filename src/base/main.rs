@@ -30,7 +30,7 @@ fn main() {
 
         execute(shortcut, &rest_args);
     } else {
-        println!("{} was not recognized as shortcut-name.\
+        print!("{} was not recognized as shortcut-name.\
                     \nDo \"shrtc help\" to get a list of the default commands and their usage.", args[1])
     }
 }
@@ -40,12 +40,12 @@ fn execute(shortcut: Shortcut, arg: &str) {
         Ok(output) => {
             let stdout = String::from_utf8_lossy(&output.stdout);
             if !stdout.is_empty() {
-                println!("{}",stdout );
+                print!("{}",stdout );
             }
 
             let stderr = String::from_utf8_lossy(&output.stderr);
             if !stderr.is_empty() {
-                println!("{}",stderr );
+                print!("{}",stderr );
             }
         }
         Err(err) => {println!("{}", err)}

@@ -1,5 +1,5 @@
 extern crate base;
-use base::{data,data::shortcut::Shortcut};
+use base::data;
 use std::env;
 
 fn main() {
