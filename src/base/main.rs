@@ -1,5 +1,6 @@
 extern crate base;
-use std::env;
+use std::{env, thread};
+use std::io::Read;
 use base::data::shortcut::Shortcut;
 
 
@@ -30,24 +31,45 @@ fn main() {
 
         execute(shortcut, &rest_args);
     } else {
-        print!("{} was not recognized as shortcut-name.\
+        println!("{} was not recognized as shortcut-name.\
                     \nDo \"shrtc help\" to get a list of the default commands and their usage.", args[1])
     }
 }
 
 fn execute(shortcut: Shortcut, arg: &str) {
-    match shortcut.execute(arg) {
-        Ok(output) => {
-            let stdout = String::from_utf8_lossy(&output.stdout);
-            if !stdout.is_empty() {
-                print!("{}",stdout );
-            }
-
-            let stderr = String::from_utf8_lossy(&output.stderr);
-            if !stderr.is_empty() {
-                print!("{}",stderr );
-            }
+    let mut child = match shortcut.execute(arg) {
+        Ok(child) => child,
+        Err(err) => {
+            println!("{}", err);
+            return;
         }
-        Err(err) => {println!("{}", err)}
     };
+
+    let mut stdout = child.stdout.take().unwrap();
+    let mut stderr = child.stderr.take().unwrap();
+
+    let stdout_thread = thread::spawn(move || {
+        let mut buf = [0; 1024];
+        while let Ok(bytes_read) = stdout.read(&mut buf) {
+            if bytes_read == 0 {
+                break;
+            }
+            print!("{}", String::from_utf8_lossy(&buf[..bytes_read]));
+        }
+    });
+
+    let stderr_thread = thread::spawn(move || {
+        let mut buf = [0; 1024];
+        while let Ok(bytes_read) = stderr.read(&mut buf) {
+            if bytes_read == 0 {
+                break;
+            }
+            eprint!("{}", String::from_utf8_lossy(&buf[..bytes_read]));
+        }
+    });
+
+    let _ = child.wait().unwrap(); // Wait for the process to finish
+    let _ = stdout_thread.join().unwrap(); // Wait for stdout thread
+    let _ = stderr_thread.join().unwrap(); // Wait for stderr thread
+    println!()
 }

@@ -1,5 +1,5 @@
 use std::io;
-use std::process::Output;
+use std::process::{Child, Stdio};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -31,7 +31,7 @@ impl Shortcut {
         return &self.default_command;
     }
 
-    pub fn execute(&self, args: &str) -> io::Result<Output> {
+    pub fn execute(&self, args: &str) -> io::Result<Child> {
         let (shell, shell_arg) = match std::env::consts::OS {
             "windows" => ("cmd", "/c"),
             _unix => ("sh", "-c"),
@@ -39,9 +39,12 @@ impl Shortcut {
         };
         let combined_command = format!("{} {}", &self.command, args);
         std::process::Command::new(shell)
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .stdin(Stdio::piped())
             .arg(shell_arg)
             .arg(combined_command)
-            .output()
+            .spawn()
     }
     pub fn to_json(&self) -> serde_json::Result<String> {
         serde_json::to_string_pretty(&self)
